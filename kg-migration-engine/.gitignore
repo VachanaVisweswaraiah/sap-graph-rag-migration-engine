@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+
+# macOS
+.DS_Store
+
+# Secrets & local overrides
+.env
+.env.*
+!.env.example
+.claude/settings.local.json
+
+# FalkorDB (if bind-mounted locally)
+falkordb_data/
+
+# Local-only generated docs (kept on disk, not shared in the repo)
+docs/guide/
+docs/FILE_GUIDE.md
+docs/FALKORDB_QUERIES.md

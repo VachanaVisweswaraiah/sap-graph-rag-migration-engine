@@ -1,0 +1,40 @@
+services:
+  falkordb:
+    # Pinned by digest, not `:latest` -- CLAUDE.md's "reproducible builds" rule
+    # (non-negotiable #3) was only actually enforced on the Python side (uv.lock)
+    # until now. This is the exact image every test/fix in this session ran
+    # against (module graph ver 41404, redis_version 8.2.2). To intentionally
+    # upgrade: pull the new tag, confirm `make test` is still green, then update
+    # this digest -- never let it drift silently on a fresh `docker compose pull`.
+    image: falkordb/falkordb@sha256:5e8c25449f6e202a69f323f2212c59c040931f5fde1571776c0153d4606c53bc
+    container_name: kgme-falkordb
+    restart: unless-stopped
+    ports:
+      - "6379:6379"   # Redis/Cypher protocol
+      - "3000:3000"   # FalkorDB Browser
+    environment:
+      REDIS_ARGS: "--requirepass ${FALKORDB_PASSWORD:-changeme-in-.env} --appendonly yes"
+    volumes:
+      # Real bug, found by testing a full container recreation (not just a
+      # restart-in-place): FalkorDB's actual Redis `dir` is
+      # /var/lib/falkordb/data, NOT /data -- the previous /data mount was
+      # never wired to where the AOF file is actually written, so the named
+      # volume was silently persisting nothing. A full `docker compose down`
+      # + `up` (or any container recreation) lost all graph data with no
+      # warning. Confirmed via `redis-cli CONFIG GET dir` against the running
+      # container.
+      - falkordb_data:/var/lib/falkordb/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${FALKORDB_PASSWORD:-changeme-in-.env}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Phase 3 (deferred): a read-only Redis ACL user for the NL->Cypher agent, e.g.
+  #   ACL SETUSER kgme_reader on '>set-a-real-password' '~*' '+@read' '+GRAPH.RO_QUERY'
+  # combined with FalkorDB's GRAPH.RO_QUERY (engine-enforced read-only), giving
+  # agents/cypher_guard.py a real DB-level backstop, not just an app-level validator.
+  # Not created yet — no agent exists to use it.
+
+volumes:
+  falkordb_data:
