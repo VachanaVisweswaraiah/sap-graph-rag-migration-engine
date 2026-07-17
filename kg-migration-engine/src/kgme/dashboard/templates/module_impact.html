@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Module Impact — kgme dashboard{% endblock %}
+{% block heading %}Value-Stream / Module Impact{% endblock %}
+{% block content %}
+<table>
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th>Total nodes</th>
+      <th>Gap</th>
+      <th>Peripheral</th>
+      <th>Documented</th>
+      <th>MIGRATES_TO coverage</th>
+      <th>S/4 catalog flags</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for m in modules %}
+    <tr>
+      <td>{{ m.module }}</td>
+      <td>{{ m.total_nodes }}</td>
+      <td>{{ m.gap_nodes }}</td>
+      <td>{{ m.peripheral_nodes }}</td>
+      <td>{{ m.documented_nodes }}</td>
+      <td>
+        {{ m.mapping_coverage.mapped_transactions }}/{{ m.mapping_coverage.total_transactions }}
+        <div class="bar-track"><div class="bar-fill" style="width: {{ m.coverage_pct }}%;"></div></div>
+      </td>
+      <td>
+        {% if m.s4_flagged_nodes %}
+          {% for severity, count in m.s4_flagged_nodes.items() %}
+            <div>{{ count }}&times; <code>{{ severity }}</code></div>
+          {% endfor %}
+        {% else %}
+          <span class="caption" style="margin: 0;">none flagged</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="caption">"module" is used in place of "value_stream" — the graph has no
+value_stream property; segmentation is by module (MM/AM/cross/governance) per
+the loaded dataset.</p>
+<p class="caption">"S/4 catalog flags" comes from the official SAP Simplification Item
+Catalog (<code>kgme enrich s4-catalog</code>), independent of this project's own
+documentation — a node can be flagged here even if it's otherwise fully
+`documented`. "none flagged" means no catalog row matched this module's nodes yet,
+not that the module is risk-free — most of the wider SAP landscape the catalog
+covers isn't represented in this graph.</p>
+{% endblock %}

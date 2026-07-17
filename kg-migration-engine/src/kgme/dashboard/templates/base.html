@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}kgme dashboard{% endblock %}</title>
+  <style>
+    :root {
+      --bg: #f4f6f6;
+      --surface: #ffffff;
+      --surface-sunken: #eceef0;
+      --border: #dbe0e2;
+      --text: #1b2224;
+      --text-muted: #5c6a6e;
+      --text-faint: #8a969a;
+      --accent: #2f6f6a;
+      --accent-strong: #204e4a;
+      --accent-soft: #e2eeec;
+      --success: #3f8f5f;
+      --danger: #ad3a3a;
+      --danger-soft: #f6e6e6;
+      --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+      --radius: 8px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #14181a;
+        --surface: #1b2022;
+        --surface-sunken: #101414;
+        --border: #2b3336;
+        --text: #e7ebec;
+        --text-muted: #9aa7aa;
+        --text-faint: #6d787b;
+        --accent: #62b3ac;
+        --accent-strong: #8fd0c9;
+        --accent-soft: #1e3230;
+        --success: #6fc98c;
+        --danger: #e08a8a;
+        --danger-soft: #341f1f;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-ui);
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-size: 14.5px;
+      line-height: 1.55;
+    }
+
+    .page { padding: 1.75rem 2rem; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 2rem;
+      height: 52px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .wordmark {
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      margin-right: 24px;
+      white-space: nowrap;
+    }
+
+    .wordmark .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    nav { display: flex; gap: 2px; height: 100%; }
+
+    nav a {
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+    }
+
+    nav a.active, nav a:hover { color: var(--text); }
+    nav a.active { border-bottom-color: var(--accent); font-weight: 600; }
+
+    h1 { font-size: 20px; margin: 0 0 1rem; letter-spacing: -0.01em; }
+    h2 { font-size: 15px; color: var(--text-muted); margin: 1.5rem 0 0.5rem; }
+
+    table { border-collapse: collapse; width: 100%; margin-top: 1rem; background: var(--surface); }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.7rem; text-align: left; }
+    th { background: var(--surface-sunken); font-weight: 600; font-size: 13px; }
+
+    .bar-track { background: var(--border); width: 200px; height: 10px; display: inline-block; border-radius: 5px; overflow: hidden; }
+    .bar-fill { background: var(--success); height: 10px; }
+
+    .caption { color: var(--text-muted); font-style: italic; margin-top: 1rem; font-size: 13px; }
+    code { background: var(--surface-sunken); padding: 0 0.3rem; border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }
+
+    a:focus-visible, button:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="topbar">
+    <div class="wordmark"><span class="dot"></span>KG Migration Engine</div>
+    <nav>
+      <a href="/dashboard/ask" {% if active_tab == 'ask' %}class="active"{% endif %}>Ask</a>
+      <a href="/dashboard/module-impact" {% if active_tab == 'module-impact' %}class="active"{% endif %}>Module Impact</a>
+      <a href="/dashboard/gaps" {% if active_tab == 'gaps' %}class="active"{% endif %}>Gap Explorer</a>
+      <a href="/dashboard/impact" {% if active_tab == 'impact' %}class="active"{% endif %}>Cross-Module Impact</a>
+      <a href="/dashboard/agents" {% if active_tab == 'agents' %}class="active"{% endif %}>Agents</a>
+    </nav>
+  </div>
+  {% block body %}
+  <div class="page">
+    <h1>{% block heading %}{% endblock %}</h1>
+    {% block content %}{% endblock %}
+  </div>
+  {% endblock %}
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Gap Explorer — kgme dashboard{% endblock %}
+{% block heading %}Gap Explorer{% endblock %}
+{% block content %}
+<h2>Gap nodes ({{ gap_nodes|length }})</h2>
+<table>
+  <thead>
+    <tr><th>Node ID</th><th>Type</th><th>Module</th><th>Source doc</th></tr>
+  </thead>
+  <tbody>
+    {% for n in gap_nodes %}
+    <tr>
+      <td><code>{{ n.node_id }}</code></td>
+      <td>{{ n.node_type or "" }}</td>
+      <td>{{ n.module or "" }}</td>
+      <td>{{ n.source_doc or "" }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>Inferred edges ({{ inferred_edges|length }})</h2>
+<table>
+  <thead>
+    <tr><th>Source</th><th>Relation</th><th>Target</th><th>Source doc</th></tr>
+  </thead>
+  <tbody>
+    {% for e in inferred_edges %}
+    <tr>
+      <td><code>{{ e.source_id }}</code></td>
+      <td>{{ e.relation }}</td>
+      <td><code>{{ e.target_id }}</code></td>
+      <td>{{ e.source_doc or "" }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="caption">Centrality ranking: low signal until ATC scan + gap docs retrieved.</p>
+{% endblock %}

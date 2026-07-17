@@ -1,0 +1,212 @@
+<!--
+NOTE: This file has been sanitized for public/private portfolio use.
+Business logic, domain-specific rules, and proprietary details have been masked.
+The coding patterns, architecture, and technical implementation remain authentic.
+[MASKED] tags indicate where original business logic has been replaced.
+-->
+{% extends "base.html" %}
+{% block title %}Agents — kgme dashboard{% endblock %}
+{% block head %}
+<style>
+  .agent-grid { display: flex; flex-direction: column; gap: 0; margin-top: 1rem; }
+
+  .agent-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .agent-card-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .agent-num {
+    font-family: var(--font-mono);
+    color: var(--text-faint);
+    font-size: 12px;
+  }
+
+  .agent-name { font-weight: 600; font-size: 15px; }
+
+  .agent-tag {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  .agent-tag.own-query { background: var(--danger-soft); color: var(--danger); }
+  .agent-tag.fixed-query { background: var(--accent-soft); color: var(--accent-strong); }
+
+  .agent-desc { margin: 0.5rem 0 0.4rem; }
+
+  .agent-example {
+    font-size: 13px;
+    color: var(--text-muted);
+    border-left: 2px solid var(--border);
+    padding-left: 0.6rem;
+    margin: 0.5rem 0 0;
+  }
+
+  .agent-gap {
+    font-size: 12.5px;
+    color: var(--danger);
+    margin: 0.5rem 0 0;
+  }
+</style>
+{% endblock %}
+{% block heading %}The 6 Agents{% endblock %}
+{% block content %}
+<p>One question comes in → a router picks exactly one of these six → one answer
+comes back. This page exists to make that easy to explain to someone new.</p>
+
+<h2>The one thing that matters most</h2>
+<p>Only <strong>As-Is</strong> lets an AI write its own database query. The other
+five run a fixed query a human wrote — the AI only ever turns already-correct
+results into readable sentences. It cannot change what data comes back.</p>
+
+<table>
+  <thead>
+    <tr><th></th><th>As-Is</th><th>The other 5</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Who decides what to query?</td>
+      <td>The AI, per question</td>
+      <td>A human, once, hand-verified</td>
+    </tr>
+    <tr>
+      <td>Can the AI influence the data returned?</td>
+      <td>No — two independent safety checks review the query first</td>
+      <td>No — there's no query for it to influence</td>
+    </tr>
+    <tr>
+      <td>What can the AI actually do?</td>
+      <td>Write the query <strong>and</strong> the answer</td>
+      <td>Only phrase the answer</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>The 6 agents</h2>
+<div class="agent-grid">
+
+  <div class="agent-card">
+    <div class="agent-card-head">
+      <span class="agent-num">1</span>
+      <span class="agent-name">As-Is</span>
+      <span class="agent-tag own-query">writes its own query</span>
+    </div>
+    <p class="agent-desc">Answers arbitrary factual questions — "what is X, what
+      uses Y, who authorizes Z" — by writing its own database query on the fly.
+      The only agent that does this, so it's the most flexible, and the only one
+      with extra guardrails (a write-blocking check, plus a database-level
+      read-only lock). Knows about every property on the graph, including ones
+      added by later enrichment (like the SAP catalog data — see agent 3).</p>
+    <p class="agent-example">"What SAP transactions does business process MM01 use?"</p>
+  </div>
+
+  <div class="agent-card">
+    <div class="agent-card-head">
+      <span class="agent-num">2</span>
+      <span class="agent-name">Migration-Mapping</span>
+      <span class="agent-tag fixed-query">fixed query</span>
+    </div>
+    <p class="agent-desc">Reports what fraction of a module's transactions have a
+      known migration target, honestly — a module with zero mappings is reported
+      as zero, never hidden. Every mapping is explicitly labeled the analyst's own
+      inferred opinion, never a sourced fact, until a human confirms it.</p>
+    <p class="agent-example">"How much of the MM module has a confirmed migration target?" → "3 of 12 (25%)."</p>
+    <p class="agent-gap">Known gap (not yet built): doesn't cross-check its own
+      mappings against the SAP Simplification Catalog data yet — even where the
+      two would agree. Planned, not started.</p>
+  </div>
+
+  <div class="agent-card">
+    <div class="agent-card-head">
+      <span class="agent-num">3</span>
+      <span class="agent-name">GxP-Compliance</span>
+      <span class="agent-tag fixed-query">fixed query</span>
+    </div>
+    <p class="agent-desc">Surfaces two independent risk categories: <strong>GxP
+      risk findings</strong> (undocumented gaps, unverified guesses, or paths into
+      a GxP-critical process — one specific finding, an automated batch-release
+      step with an unverified data source, is always shown first regardless of
+      severity), and <strong>SAP Simplification Catalog findings</strong> (nodes
+      the official SAP migration catalog flags as breaking, reported separately,
+      always labeled external/unconfirmed).</p>
+    <p class="agent-example">"What is the compliance risk with QM:BATCH_RELEASE and LAB_SYSTEM?"</p>
+  </div>
+
+  <div class="agent-card">
+    <div class="agent-card-head">
+      <span class="agent-num">4</span>
+      <span class="agent-name">Cross-Module Impact</span>
+      <span class="agent-tag fixed-query">fixed query</span>
+    </div>
+    <p class="agent-desc">Finds the one place a Materials-Management chain and an
+      Asset-Accounting chain meet, and reports which single link in that chain is
+      least trustworthy — the one most likely to silently break during
+      migration.</p>
+    <p class="agent-example">"How do the MM and AM modules connect to each other?"</p>
+  </div>
+
+  <div class="agent-card">
+    <div class="agent-card-head">
+      <span class="agent-num">5</span>
+      <span class="agent-name">Gaps</span>
+      <span class="agent-tag fixed-query">fixed query</span>
+    </div>
+    <p class="agent-desc">A plain inventory: which documents/nodes are referenced
+      but never actually received, and which relationships are only an inferred
+      guess. Deliberately not a risk narrative — just a list of things to go chase
+      down.</p>
+    <p class="agent-example">"What documents are referenced in this graph but not in our possession?"</p>
+  </div>
+
+  <div class="agent-card">
+    <div class="agent-card-head">
+      <span class="agent-num">6</span>
+      <span class="agent-name">Temporal</span>
+      <span class="agent-tag fixed-query">no query at all</span>
+    </div>
+    <p class="agent-desc">The graph has no field tracking a document's age, so
+      this agent always says so plainly, rather than guessing. No database query,
+      no AI call — a fixed, honest answer, because there's genuinely nothing to
+      compute.</p>
+    <p class="agent-example">"How old is the documentation behind MM01, and is it still valid?"</p>
+  </div>
+
+</div>
+
+<h2>How a question finds its way to the right agent</h2>
+<p>One AI call reads the question and picks exactly one of the 6 routes —
+reasoning about <em>meaning</em>, not matching keywords. It's structurally forced
+to return one of the 6 exact names, so it can't return something malformed or
+made up.</p>
+
+<table>
+  <thead>
+    <tr><th>Question sounds like...</th><th>Actually routes to</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>"What compliance risks exist?"</td><td>Compliance (risk framing)</td></tr>
+    <tr><td>"What documents are missing?"</td><td>Gaps (plain inventory, same underlying data)</td></tr>
+    <tr><td>"Any SAP catalog findings for module X?"</td><td>Compliance (even without risk language — a broad catalog survey)</td></tr>
+    <tr><td>"What does the catalog say about one specific transaction?"</td><td>As-Is (a targeted lookup, not a survey)</td></tr>
+  </tbody>
+</table>
+
+<p class="caption">Every fact any agent states is tagged <code>documented</code>
+(a real source says so) or <code>inferred</code>/<code>gap</code> (a guess, or a
+known hole) — and an agent never states one as fact without the other. If there's
+no data to answer something, every agent says so plainly instead of making
+something up.</p>
+{% endblock %}

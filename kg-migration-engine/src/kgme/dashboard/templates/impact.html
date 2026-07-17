@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Cross-Module Impact — kgme dashboard{% endblock %}
+{% block heading %}Cross-Module Impact{% endblock %}
+{% block content %}
+<h2>Reconciliation chains ({{ chains|length }})</h2>
+{% for c in chains %}
+<table>
+  <thead>
+    <tr><th>Node</th><th>Confidence</th><th>Module</th><th>Inbound (documented/total)</th><th>Weak neighbors</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>{{ c.start.node_id }}</code></td>
+      <td>{{ c.start.confidence or "" }}</td>
+      <td>{{ c.start.module or "" }}</td>
+      <td>{{ c.start.inbound_documented }}/{{ c.start.inbound_total }}</td>
+      <td>{{ c.start.weak_neighbors }}</td>
+    </tr>
+    <tr>
+      <td colspan="5">-[{{ c.investment_relation }} ({{ c.investment_confidence or "" }})]-&gt;</td>
+    </tr>
+    <tr>
+      <td><code>{{ c.mid1.node_id }}</code></td>
+      <td>{{ c.mid1.confidence or "" }}</td>
+      <td>{{ c.mid1.module or "" }}</td>
+      <td>{{ c.mid1.inbound_documented }}/{{ c.mid1.inbound_total }}</td>
+      <td>{{ c.mid1.weak_neighbors }}</td>
+    </tr>
+    <tr>
+      <td colspan="5">-[{{ c.intermediate_relation }} ({{ c.intermediate_confidence or "" }})]-&gt;</td>
+    </tr>
+    <tr>
+      <td><code>{{ c.mid2.node_id }}</code></td>
+      <td>{{ c.mid2.confidence or "" }}</td>
+      <td>{{ c.mid2.module or "" }}</td>
+      <td>{{ c.mid2.inbound_documented }}/{{ c.mid2.inbound_total }}</td>
+      <td>{{ c.mid2.weak_neighbors }}</td>
+    </tr>
+    <tr>
+      <td colspan="5">-[{{ c.reconciliation_relation }} ({{ c.reconciliation_confidence or "" }})]-&gt; back to {{ c.start.node_id }}</td>
+    </tr>
+  </tbody>
+</table>
+<p class="caption">Weakest link in this chain: <code>{{ c.weakest_link_confidence or "" }}</code> confidence — a migration change to that hop is the one most likely to break the reconciliation.</p>
+{% else %}
+<p class="caption">No LINKED_VIA_INVESTMENT -&gt; RECONCILES_TO reconciliation chain found in the loaded graph.</p>
+{% endfor %}
+<p class="caption">Inbound-edge counts are scoped only to the nodes in each chain, not a graph-wide centrality ranking — general centrality stays low-signal until an ATC scan (see Gap Explorer).</p>
+{% endblock %}
