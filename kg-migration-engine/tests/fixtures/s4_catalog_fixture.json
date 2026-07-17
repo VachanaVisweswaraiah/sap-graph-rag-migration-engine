@@ -1,0 +1,14 @@
+{
+  "simplification_items": [
+    {
+      "sim_id": "SIM0001",
+      "title": "Sample Materials Management Simplification",
+      "module": "MM",
+      "description": "Sample S/4HANA simplification item \u2014 placeholder content for portfolio demo.",
+      "impacted_transactions": [
+        "TX_MM01_MAIN"
+      ],
+      "mandatory": true
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+﻿edge_id,source_id,target_id,relation,confidence,source_doc,source_ref,notes
+E0001,PROC:MM01,STEP:MM01_10,HAS_STEP,documented,RA_PROC01,RA V002 Ch.3.2,
+E0002,PROC:MM01,STEP:MM01_20,HAS_STEP,documented,RA_PROC01,RA V002 Ch.3.2,
+E0004,STEP:MM01_10,TX:MM01_MAIN,USES_TRANSACTION,documented,RA_PROC01,RA V002 Ch.3.2,

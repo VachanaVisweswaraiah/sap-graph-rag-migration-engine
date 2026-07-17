@@ -1,0 +1,6 @@
+﻿node_id,node_type,label,module,gxp_classification,confidence,source_doc,source_ref,notes
+PROC:MM01,BusinessProcess,Goods Receipt without Purchase Order Reference / Stock Take,MM,GxP-critical,documented,RA_PROC01,RA V002 Ch.3.2,Only RA on file; RPN max 27 (expiry date)
+STEP:MM01_10,ProcessStep,Initiate — Goods Receipt without Purchase Order Reference / Stock Take,MM,unknown,documented,RA_PROC01,RA V002 Ch.3.2,
+STEP:MM01_20,ProcessStep,Validate — Goods Receipt without Purchase Order Reference / Stock Take,MM,unknown,documented,RA_PROC01,RA V002 Ch.3.2,
+TX:MM01_MAIN,Transaction,Transaction for Goods Receipt without Purchase Order Reference / Stock Take,MM,unknown,documented,RA_PROC01,RA V002 Ch.3.2,
+ROLE:MM01_BASE,AuthorizationRole,Base role for Goods Receipt without Purchase Order Reference / Stock Take,MM,unknown,peripheral,RA_PROC01,RA V002 Ch.3.2,
