@@ -1,0 +1,20 @@
+﻿file,column,description,allowed_values_or_format
+kg_nodes.csv,node_id,"Unique ID, prefix=type (PROC:,TX:,BWA:,ROLE:,ORG:,SYS:,...)",String
+kg_nodes.csv,node_type,Node type / label for the property graph,BusinessProcess|ProcessStep|Transaction|CustomTransaction|MovementType|OutputType|Form|CustomizingTable|SystemTable|Config|ValuationArea|CompanyCode|Plant|WarehouseNumber|StorageLocation|SalesOrg|AuthorizationRole|AuthorizationObject|MasterData|ClassType|QMObject|ExternalSystem|ReferencedDocument|SOP
+kg_nodes.csv,label,Human-readable name,String
+kg_nodes.csv,module,Functional module,MM|AM|cross|governance
+kg_nodes.csv,gxp_classification,GxP classification,GxP-critical|non-critical|unknown|blank
+kg_nodes.csv,confidence,Evidence depth,documented|peripheral|inferred|gap
+kg_nodes.csv,source_doc,Primary source (short code),see script header
+kg_nodes.csv,source_ref,Specific citation,Chapter/Page/TP-No.
+kg_nodes.csv,notes,"Notes, esp. gaps",Free text
+kg_edges.csv,edge_id,Sequential edge ID,E####
+kg_edges.csv,source_id / target_id,References to node_id,FK -> kg_nodes.node_id
+kg_edges.csv,relation,Relationship type (UPPER_SNAKE),HAS_STEP|NEXT|USES_TRANSACTION|USES_MOVEMENT_TYPE|PRODUCES_OUTPUT|CONTROLLED_BY|AUTHORIZES|REQUIRES_BASE_ROLE|GRANTS_MOVEMENT_TYPE|GRANTS_TRANSACTION|CONTAINS_OBJECT|RESTRICTED_TO|LINKED_VIA_INVESTMENT|RECONCILES_TO|PRECEDES|FOLLOWED_BY|SUPPLIES|FEEDS_BACK|CREATES|CLASSIFIED_BY|IDENTIFIES|TRACES|SUSPECTED_SOURCE|...
+kg_edges.csv,confidence,Evidence depth of the relationship,documented|peripheral|inferred|gap
+kg_edges.csv,source_doc/source_ref/notes,Provenance of the edge,see above
+kg_process_master.csv,*,"Denormalized one-row-per-process view (review/QA), not for graph load",List fields separated by ';'
+ALL,confidence=documented,Stated as fact/requirement in the document,-
+ALL,confidence=peripheral,Only mentioned in passing / cross-reference / inventory name,-
+ALL,confidence=inferred,"Derived by the LLM from documented facts (hypothesis, clearly marked)",-
+ALL,confidence=gap,Conceptually present but content NOT evidenced (gap),-

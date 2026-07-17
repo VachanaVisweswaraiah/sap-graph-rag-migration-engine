@@ -1,0 +1,56 @@
+﻿node_id,node_type,label,module,gxp_classification,confidence,source_doc,source_ref,notes
+PROC:MM01,BusinessProcess,Goods Receipt without Purchase Order Reference / Stock Take,MM,GxP-critical,documented,RA_PROC01,RA V002 Ch.3.2,Only RA on file; RPN max 27 (expiry date)
+STEP:MM01_10,ProcessStep,Initiate — Goods Receipt without Purchase Order Reference / Stock Take,MM,unknown,documented,RA_PROC01,RA V002 Ch.3.2,
+STEP:MM01_20,ProcessStep,Validate — Goods Receipt without Purchase Order Reference / Stock Take,MM,unknown,documented,RA_PROC01,RA V002 Ch.3.2,
+STEP:MM01_30,ProcessStep,Post — Goods Receipt without Purchase Order Reference / Stock Take,MM,unknown,peripheral,RA_PROC01,RA V002 Ch.3.2,
+TX:MM01_MAIN,Transaction,Transaction for Goods Receipt without Purchase Order Reference / Stock Take,MM,unknown,documented,RA_PROC01,RA V002 Ch.3.2,
+ROLE:MM01_BASE,AuthorizationRole,Base role for Goods Receipt without Purchase Order Reference / Stock Take,MM,unknown,peripheral,RA_PROC01,RA V002 Ch.3.2,
+PROC:MM02,BusinessProcess,Goods Receipt Processing for Externally Sourced Materials,MM,unknown,peripheral,BP_ZI_MM_BASE,p.2 Scope,Only authorization/cross-references; transaction path documented
+STEP:MM02_10,ProcessStep,Initiate — Goods Receipt Processing for Externally Sourced Materials,MM,unknown,documented,BP_ZI_MM_BASE,p.2 Scope,
+STEP:MM02_20,ProcessStep,Validate — Goods Receipt Processing for Externally Sourced Materials,MM,unknown,documented,BP_ZI_MM_BASE,p.2 Scope,
+STEP:MM02_30,ProcessStep,Post — Goods Receipt Processing for Externally Sourced Materials,MM,unknown,peripheral,BP_ZI_MM_BASE,p.2 Scope,
+STEP:MM02_40,ProcessStep,Reconcile — Goods Receipt Processing for Externally Sourced Materials,MM,unknown,peripheral,BP_ZI_MM_BASE,p.2 Scope,
+TX:MM02_MAIN,Transaction,Transaction for Goods Receipt Processing for Externally Sourced Materials,MM,unknown,documented,BP_ZI_MM_BASE,p.2 Scope,
+ROLE:MM02_BASE,AuthorizationRole,Base role for Goods Receipt Processing for Externally Sourced Materials,MM,unknown,peripheral,BP_ZI_MM_BASE,p.2 Scope,
+PROC:MM03,BusinessProcess,Stock Transfer Between Storage Locations,MM,unknown,peripheral,BP_ZI_MM_BASE,p.2,Role reference ZX_MM03_01
+STEP:MM03_10,ProcessStep,Initiate — Stock Transfer Between Storage Locations,MM,unknown,documented,BP_ZI_MM_BASE,p.2,
+STEP:MM03_20,ProcessStep,Validate — Stock Transfer Between Storage Locations,MM,unknown,documented,BP_ZI_MM_BASE,p.2,
+STEP:MM03_30,ProcessStep,Post — Stock Transfer Between Storage Locations,MM,unknown,peripheral,BP_ZI_MM_BASE,p.2,
+STEP:MM03_40,ProcessStep,Reconcile — Stock Transfer Between Storage Locations,MM,unknown,peripheral,BP_ZI_MM_BASE,p.2,
+TX:MM03_MAIN,Transaction,Transaction for Stock Transfer Between Storage Locations,MM,unknown,documented,BP_ZI_MM_BASE,p.2,
+ROLE:MM03_BASE,AuthorizationRole,Base role for Stock Transfer Between Storage Locations,MM,unknown,peripheral,BP_ZI_MM_BASE,p.2,
+PROC:MM04,BusinessProcess,Framework Order Processing,MM,unknown,peripheral,PRD_GP_MM,TP 2001598,Inventory name only
+STEP:MM04_10,ProcessStep,Initiate — Framework Order Processing,MM,unknown,documented,PRD_GP_MM,TP 2001598,
+STEP:MM04_20,ProcessStep,Validate — Framework Order Processing,MM,unknown,documented,PRD_GP_MM,TP 2001598,
+STEP:MM04_30,ProcessStep,Post — Framework Order Processing,MM,unknown,peripheral,PRD_GP_MM,TP 2001598,
+STEP:MM04_40,ProcessStep,Reconcile — Framework Order Processing,MM,unknown,peripheral,PRD_GP_MM,TP 2001598,
+TX:MM04_MAIN,Transaction,Transaction for Framework Order Processing,MM,unknown,documented,PRD_GP_MM,TP 2001598,
+ROLE:MM04_BASE,AuthorizationRole,Base role for Framework Order Processing,MM,unknown,peripheral,PRD_GP_MM,TP 2001598,
+PROC:MM05,BusinessProcess,Stock-to-Stock Reposting,MM,unknown,peripheral,BP_ZI_MM_BASE,p.2,Forced conversion pending
+STEP:MM05_10,ProcessStep,Initiate — Stock-to-Stock Reposting,MM,unknown,documented,BP_ZI_MM_BASE,p.2,
+STEP:MM05_20,ProcessStep,Validate — Stock-to-Stock Reposting,MM,unknown,documented,BP_ZI_MM_BASE,p.2,
+STEP:MM05_30,ProcessStep,Post — Stock-to-Stock Reposting,MM,unknown,peripheral,BP_ZI_MM_BASE,p.2,
+TX:MM05_MAIN,Transaction,Transaction for Stock-to-Stock Reposting,MM,unknown,documented,BP_ZI_MM_BASE,p.2,
+ROLE:MM05_BASE,AuthorizationRole,Base role for Stock-to-Stock Reposting,MM,unknown,peripheral,BP_ZI_MM_BASE,p.2,
+PROC:AM01,BusinessProcess,Asset Acquisition via Internal Order Settlement,AM,non-critical,documented,RA_PROC02,RA V001 Ch.4.1,Reconciliation to Finance confirmed
+STEP:AM01_10,ProcessStep,Initiate — Asset Acquisition via Internal Order Settlement,AM,unknown,documented,RA_PROC02,RA V001 Ch.4.1,
+STEP:AM01_20,ProcessStep,Validate — Asset Acquisition via Internal Order Settlement,AM,unknown,documented,RA_PROC02,RA V001 Ch.4.1,
+STEP:AM01_30,ProcessStep,Post — Asset Acquisition via Internal Order Settlement,AM,unknown,peripheral,RA_PROC02,RA V001 Ch.4.1,
+TX:AM01_MAIN,Transaction,Transaction for Asset Acquisition via Internal Order Settlement,AM,unknown,documented,RA_PROC02,RA V001 Ch.4.1,
+ROLE:AM01_BASE,AuthorizationRole,Base role for Asset Acquisition via Internal Order Settlement,AM,unknown,peripheral,RA_PROC02,RA V001 Ch.4.1,
+PROC:AM02,BusinessProcess,Asset Retirement and Disposal,AM,unknown,peripheral,BP_ZI_AM_BASE,p.4,Cross-module reconciliation gap
+STEP:AM02_10,ProcessStep,Initiate — Asset Retirement and Disposal,AM,unknown,documented,BP_ZI_AM_BASE,p.4,
+STEP:AM02_20,ProcessStep,Validate — Asset Retirement and Disposal,AM,unknown,documented,BP_ZI_AM_BASE,p.4,
+STEP:AM02_30,ProcessStep,Post — Asset Retirement and Disposal,AM,unknown,peripheral,BP_ZI_AM_BASE,p.4,
+STEP:AM02_40,ProcessStep,Reconcile — Asset Retirement and Disposal,AM,unknown,peripheral,BP_ZI_AM_BASE,p.4,
+TX:AM02_MAIN,Transaction,Transaction for Asset Retirement and Disposal,AM,unknown,documented,BP_ZI_AM_BASE,p.4,
+ROLE:AM02_BASE,AuthorizationRole,Base role for Asset Retirement and Disposal,AM,unknown,peripheral,BP_ZI_AM_BASE,p.4,
+PROC:QM01,BusinessProcess,Quality Batch Release,cross,GxP-critical,documented,RA_PROC01,RA V002 Ch.5.1,Flagship compliance finding lives here
+STEP:QM01_10,ProcessStep,Initiate — Quality Batch Release,cross,unknown,documented,RA_PROC01,RA V002 Ch.5.1,
+STEP:QM01_20,ProcessStep,Validate — Quality Batch Release,cross,unknown,documented,RA_PROC01,RA V002 Ch.5.1,
+STEP:QM01_30,ProcessStep,Post — Quality Batch Release,cross,unknown,peripheral,RA_PROC01,RA V002 Ch.5.1,
+TX:QM01_MAIN,Transaction,Transaction for Quality Batch Release,cross,unknown,documented,RA_PROC01,RA V002 Ch.5.1,
+ROLE:QM01_BASE,AuthorizationRole,Base role for Quality Batch Release,cross,unknown,peripheral,RA_PROC01,RA V002 Ch.5.1,
+QM:BATCH_RELEASE,QMObject,Quality Batch Release Object,cross,GxP-critical,documented,RA_PROC01,RA V002 Ch.5.1,Central quality gate before batch disposition
+SYS:LAB_SYSTEM,ExternalSystem,External Laboratory Information System,cross,GxP-critical,gap,RA_PROC01,RA V002 Ch.5.3,Interface not documented in any reviewed source
+ORG:PLANT_01,Plant,Plant 0100,cross,non-critical,documented,BP_ZI_MM_BASE,p.1,
