@@ -1,0 +1,65 @@
+name: CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+defaults:
+  run:
+    # The actual project lives in kg-migration-engine/, not the repo root — this
+    # workflow file must live at the true repo root for GitHub Actions to discover
+    # it at all, so every `run:` step needs to cd into the project directory.
+    working-directory: kg-migration-engine
+
+jobs:
+  quality-and-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Install
+        run: uv sync --all-extras --dev
+      - name: Ruff (lint)
+        run: uv run ruff check .
+      - name: Ruff (format)
+        run: uv run ruff format --check .
+      - name: Mypy (strict)
+        run: uv run mypy
+      - name: Pytest (unit)
+        run: uv run pytest tests/unit
+
+  integration:
+    needs: quality-and-unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Install
+        run: uv sync --all-extras --dev
+      - name: Pytest (unit + integration, testcontainers, coverage gate)
+        # Coverage is gated here against the COMBINED unit+integration run — matching
+        # `make test` locally exactly. Gating integration tests alone against the whole
+        # codebase's coverage was a bug: files fully covered by unit tests (e.g. cli.py,
+        # llm_client.py) run in a separate job and never contribute here, so an
+        # integration-only run always undercounts real coverage.
+        run: uv run pytest tests/unit tests/integration --cov=kgme --cov-fail-under=70
+
+  contract:
+    needs: quality-and-unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Install
+        run: uv sync --all-extras --dev
+      - name: Pytest (contract, validates data/raw)
+        run: uv run pytest tests/contract -m contract
